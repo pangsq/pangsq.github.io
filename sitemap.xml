@@ -2,44 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_1/index/</loc>
-    
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/02/controllerManagerEntry/index/</loc>
-    
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_2/index/</loc>
-    
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/01/sharedIndexInformer/index/</loc>
-    
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://blog.pangsq.cn/categories/index.html</loc>
     
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
+    <lastmod>2020-05-03T10:23:49.228Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/tags/index.html</loc>
     
-    <lastmod>2020-05-03T04:13:59.591Z</lastmod>
+    <lastmod>2020-05-03T10:23:49.228Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/03/build-your-blog/</loc>
+    
+    <lastmod>2020-05-03T10:23:49.224Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_1/index/</loc>
+    
+    <lastmod>2020-05-03T10:23:49.224Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/02/controllerManagerEntry/index/</loc>
+    
+    <lastmod>2020-05-03T10:23:49.224Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_2/index/</loc>
+    
+    <lastmod>2020-05-03T10:23:49.224Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/01/sharedIndexInformer/index/</loc>
+    
+    <lastmod>2020-05-03T10:23:49.224Z</lastmod>
     
   </url>
   

@@ -8,7 +8,7 @@ tags:
 - Entry
 - Golang
 categories:
-- [Kuberneter, Controller]
+- [Kubernetes, Controller]
 ---
 
 branch: release-v1.18

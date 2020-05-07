@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Kubernetes Controller —— ReplicaSet 和 Replication"><meta name="keywords" content="Kubernetes,Controller,ReplicaSet,Replication"><meta name="author" content="锋寒"><meta name="copyright" content="锋寒"><title>Kubernetes Controller —— ReplicaSet 和 Replication | 锋寒的博客</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ReplicaSet-and-Replication"><span class="toc-number">1.</span> <span class="toc-text">ReplicaSet and Replication</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ReplicaSet"><span class="toc-number">1.1.</span> <span class="toc-text">ReplicaSet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#入口"><span class="toc-number">1.1.1.</span> <span class="toc-text">入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构体"><span class="toc-number">1.1.2.</span> <span class="toc-text">结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Informer与EventHandler"><span class="toc-number">1.1.3.</span> <span class="toc-text">Informer与EventHandler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Worker"><span class="toc-number">1.1.4.</span> <span class="toc-text">Worker</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建Pods策略"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">创建Pods策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除Pods策略"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">删除Pods策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Replication"><span class="toc-number">1.2.</span> <span class="toc-text">Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.3.</span> <span class="toc-text">结语</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">锋寒</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">7</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">17</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">4</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">锋寒的博客</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">Kubernetes Controller —— ReplicaSet 和 Replication</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-07</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Kubernetes/">Kubernetes</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Kubernetes/Controller/">Controller</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="ReplicaSet-and-Replication"><a href="#ReplicaSet-and-Replication" class="headerlink" title="ReplicaSet and Replication"></a>ReplicaSet and Replication</h1><p>现下，Deployment算是k8s中使用最广泛的控制器，而ReplicaSet和Replication我们一般不会直接用到，但也值得研究下它们的实现。</p>
+<p>在Deployment出现前，Replication往往是部署无状态应用（无论单副本还是多副本）的首选；而Deployment又工作在ReplicaSet之上，借助多个ReplicaSet来实现多版本控制。</p>
+<blockquote>
+<p>ReplicaSetController is responsible for synchronizing ReplicaSet objects stored in the system with actual running pods.</p>
+</blockquote>
+<blockquote>
+<p>ReplicationManager is responsible for synchronizing ReplicationController objects stored</p>
+</blockquote>
+<p>本文的代码基于<a href="https://github.com/kubernetes/kubernetes/tree/release-1.18。" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/tree/release-1.18。</a></p>
+<h2 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h2><h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">startReplicaSetController</span><br><span class="line">    <span class="keyword">go</span> replicaset.NewReplicaSetController(</span><br><span class="line">        ctx.InformerFactory.Apps().V1().ReplicaSets(),</span><br><span class="line">        ctx.InformerFactory.Core().V1().Pods(),</span><br><span class="line">        ctx.ClientBuilder.ClientOrDie(<span class="string">"replicaset-controller"</span>),</span><br><span class="line">        replicaset.BurstReplicas,</span><br><span class="line">    ).Run(<span class="keyword">int</span>(ctx.ComponentConfig.ReplicaSetController.ConcurrentRSSyncs), ctx.Stop)</span><br></pre></td></tr></table></figure>
+
+<p>从启动方法可以清楚，ReplicaSetController关注集群中的ReplicaSets和Pods。</p>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ReplicaSetController <span class="keyword">struct</span> &#123;</span><br><span class="line">    schema.GroupVersionKind</span><br><span class="line">    kubeClient clientset.Interface</span><br><span class="line">    podControl controller.PodControlInterface</span><br><span class="line">    burstReplicas <span class="keyword">int</span></span><br><span class="line">    syncHandler <span class="function"><span class="keyword">func</span><span class="params">(rsKey <span class="keyword">string</span>)</span> <span class="title">error</span></span></span><br><span class="line">    expectations *controller.UIDTrackingControllerExpectations</span><br><span class="line">    rsLister appslisters.ReplicaSetLister</span><br><span class="line">    rsListerSynced cache.InformerSynced</span><br><span class="line">    podLister corelisters.PodLister</span><br><span class="line">    podListerSynced cache.InformerSynced</span><br><span class="line">    queue workqueue.RateLimitingInterface</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>schema.GroupVersionKind</code>: group,version,kind</li>
+<li><code>kubeClient</code>: 用于和apiserver通信</li>
+<li><code>podControl</code>: 操作pod的接口，含CreatePods/CreatePodsOnNode/CreatePodsWithControllerRef/DeletePod/PatchPod等方法</li>
+<li><code>burstReplicas</code>: 调整ReplicaSet的Pods时，单次最大进行的Pod数量</li>
+<li><code>syncHandler</code>: 调谐方法</li>
+<li><code>expectations</code>: 存放针对各个rs 期望创建或删除的Pod个数（如果是删除，还会存放待删除Pod的key——namespace/name）</li>
+<li><code>rsLister</code>: 列出ReplicaSet的工具（从Informer中的Indexer中获取数据，不直接访问apiserver）</li>
+<li><code>rsListerSynced</code>: 初始时rsInformer通过ListerWatcher的list获取的所有ReplicaSet是否已经分发到EventHandler处理完毕</li>
+<li><code>podLister</code>: 列出Pod的工具（从Informer中的Indexer中获取数据，不直接访问apiserver）</li>
+<li><code>podListerSynced</code>: 初始时podInformer通过ListerWatcher的list获取的所有Pod是否已经分发到EventHandler处理完毕</li>
+<li><code>queue</code>: 限流的工作队列</li>
+</ol>
+<h3 id="Informer与EventHandler"><a href="#Informer与EventHandler" class="headerlink" title="Informer与EventHandler"></a>Informer与EventHandler</h3><p>结构体存在两种Informer：PodInformer和ReplicaSetInformer。</p>
+<p>这两个Informer注册的EventHandler如下图所示：</p>
+<img src="/2020/05/07/controller-ReplicaSet-Replication/replicaset.png" width="1000" hegiht="600" align="center">
+
+<ol>
+<li><code>addPod</code>: 分3种情况<ol>
+<li><code>pod.DeletionTimestamp != nil</code>该Pod已经处于pending deletion状态，直接调用deletePod</li>
+<li>该Pod存在关联的Controller，且该Controller是已知的ReplicaSet，则调用CreateObserved（调低expectations中相应RS的期望创建Pod数）并将RS的key加入到queue中</li>
+<li>该Pod不存在任何关联的Controller（这种情况下称该Pod是Orphan），但存在同一namespace内labelSelector与Pod的labels匹配的RS，将这些RS的key加入到queue中（后续Worker处理可以尝试将Pod与RS关联）</li>
+</ol>
+</li>
+<li><code>updatePod</code>: 分2种情况<ol>
+<li><code>curPod.DeletionTimestamp != nil</code> 则调用deletePod删除curPod，如果oldPod与curPod的labels不相同，则也将oldPod删除</li>
+<li>如果oldPod存在关联的ReplicaSet，则将该RS的key加入到queue中<ol>
+<li>如果当前curPod有关联的ReplicaSet，则将RS的key加入到queue中</li>
+<li>如果当前curPod是Orphan，则依旧将labels匹配的RS的key加入到queue中</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><code>deletePod</code>: 如果该Pod不是Orphan，则调用DeletionObserved（调低expectations中相应RS的期望删除Pod数）并将RS的key加入到queue中</li>
+<li><code>addRS</code>: 直接将该RS的key加入到queue中</li>
+<li><code>updateRS</code>: 如果<code>curRS.UID != oldRS.UID</code>，则调用deleteRS将oldRS删除；将curRS的key加入queue</li>
+<li><code>deleteRS</code>: 调用DeleteExpectations（由于RS本身不存在了，因此存于expectations中的期望创建或删除Pod数也就没意义了），将RS的key加入到queue中</li>
+</ol>
+<h3 id="Worker"><a href="#Worker" class="headerlink" title="Worker"></a>Worker</h3><p>Worker的调谐逻辑见<a href="https://github.com/kubernetes/kubernetes/blob/a654bda3de8174c0a27b098c6f768ee8f47ffbe6/pkg/controller/replicaset/replica_set.go#L568" target="_blank" rel="noopener">syncReplicaSet</a>方法，它会从queue中拾取需要调谐的ReplicaSet（格式是namespace/name），然后分情况进行处理</p>
+<ol>
+<li>ReplicaSet不存在，则直接从expectations中删除期望值即可</li>
+<li>ReplicaSet存在，给labels匹配但没有ControllerRef的Pods指定Controller</li>
+<li>ReplicaSet存在，判断当前activePods数量与ReplicaSet的Replicas否相等，不等则调用<code>manageReplicas</code>对ReplicaSet拥有的Pod数进行调整，最后更新ReplicaSet的状态<ol>
+<li><code>manageReplicas</code>时若activePods不足，则在expectations中设置期望创建的Pod数量，然后创建指定Controller的Pods</li>
+<li><code>manageReplicas</code>时若activePods超过，则筛选出要删除的Pods，添加进expectations，之后删除这些Pods</li>
+</ol>
+</li>
+</ol>
+<p>在创建或删除Pods分别有一些策略：</p>
+<h4 id="创建Pods策略"><a href="#创建Pods策略" class="headerlink" title="创建Pods策略"></a>创建Pods策略</h4><ol>
+<li>一次<code>manageReplicas</code>创建的Pods数量不超过burstReplicas（默认是500）</li>
+<li>执行批量创建Pod时使用slowStartBatch（慢启动）策略：分批次创建，每次并发启动n个goroutine创建n个Pod，n从1开始指数增长（1-&gt;2-&gt;3-&gt;4-&gt;,,,），直到所有Pods创建完毕；但只要出现一个异常，就不再进行下一批次的创建</li>
+</ol>
+<h4 id="删除Pods策略"><a href="#删除Pods策略" class="headerlink" title="删除Pods策略"></a>删除Pods策略</h4><ol>
+<li>一次<code>manageReplicas</code>删除的Pods数量不超过burstReplicas（默认是500）</li>
+<li>选取最适合被删除的Pods。列出待删除Pods的候选项时，还会获取该ReplicaSet的Owner拥有的所有ReplicaSets关联的Pods（例如一个Deployment拥有两个ReplicaSet——a和b，则manageReplicas(a)时也将b的Pods考虑在内），用作Pods打分时的参考</li>
+<li>在给这些Pods打分时，使用下列策略（有优先级，只要一条符合就不再往下判断）：<ol>
+<li>根据是否被调度。没有被调度（NodeName为空）的Pod更适合被删除</li>
+<li>根据Pod状态。Pending比Unknown更适合被删除，Unknown比Running更适合被删除</li>
+<li>根据是否就绪。NotReady比Ready更适合被删除</li>
+<li>根据所处节点上候选Pod数量（包含了同Owner的ReplicaSet的Pod）。Pod越多越适合被删除（例如ReplicaSet的Replicas为2，但当前节点a上有2个该ReplicaSet的Pod，而节点b上只有1个，那么a上的某个Pod更适合被删除）</li>
+<li>根据就绪时间。当两个Pod都是Ready状态，晚Ready的更适合被删除</li>
+<li>根据重启次数。重启次数越多，越适合被删除</li>
+<li>根据创建时间。创建越晚，越适合被删除</li>
+</ol>
+</li>
+</ol>
+<h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><p>在本文对Controller进行分析的时候，Replication已与ReplicaSet完全无差别（除了名字），因为Replication的实现复用了ReplicaSet的源码。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// It is actually just a wrapper around ReplicaSetController.</span></span><br><span class="line"><span class="keyword">type</span> ReplicationManager <span class="keyword">struct</span> &#123;</span><br><span class="line">    replicaset.ReplicaSetController</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>ReplicaSet（RS）和Replication（RC）是k8s中非常经典的编排控制器，功能简单（维持应用副本数量），但它的实现上也体现了一些Controller技巧和思想：</p>
+<ol>
+<li>使用<code>slowStartBatch</code>来避免创建Pod时的拥塞。类比tcp发包时要考虑批量的报文进入网络可能产生的拥塞，创建Pod也要考虑k8s的承压能力；并发创建数量由小慢慢变大，可以提前发现问题。</li>
+<li>使用<code>expectations</code>记录(ExpectCreations/ExpectDeletions)期望创建或删除的资源量，再通过观察(CreationObserved/DeletionObserved)资源变化，将资源量的调整做成一个异步的、命令式的过程。</li>
+<li>Pod所处StartUp阶段可以作为Pod竞争时衡量优先级的一个方面。</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">锋寒</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.pangsq.cn/2020/05/07/controller-ReplicaSet-Replication/">https://blog.pangsq.cn/2020/05/07/controller-ReplicaSet-Replication/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.pangsq.cn">锋寒的博客</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kubernetes/">Kubernetes</a><a class="post-meta__tags" href="/tags/Controller/">Controller</a><a class="post-meta__tags" href="/tags/ReplicaSet/">ReplicaSet</a><a class="post-meta__tags" href="/tags/Replication/">Replication</a></div><nav id="pagination"><div class="next-post pull-right"><a href="/2020/05/05/workQueue/"><span>Kubernetes运行机制 —— WorkQueue</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2020 By 锋寒</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

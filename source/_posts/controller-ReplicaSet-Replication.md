@@ -11,8 +11,6 @@ categories:
 - [Kubernetes, Controller]
 ---
 
-# ReplicaSet and Replication
-
 现下，Deployment算是k8s中使用最广泛的控制器，而ReplicaSet和Replication我们一般不会直接用到，但也值得研究下它们的实现。
 
 在Deployment出现前，Replication往往是部署无状态应用（无论单副本还是多副本）的首选；而Deployment又工作在ReplicaSet之上，借助多个ReplicaSet来实现多版本控制。

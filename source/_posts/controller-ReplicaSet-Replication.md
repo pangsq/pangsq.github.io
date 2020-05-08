@@ -137,3 +137,7 @@ ReplicaSet（RS）和Replication（RC）是k8s中非常经典的编排控制器�
 1. 使用`slowStartBatch`来避免创建Pod时的拥塞。类比tcp发包时要考虑批量的报文进入网络可能产生的拥塞，创建Pod也要考虑k8s的承压能力；并发创建数量由小慢慢变大，可以提前发现问题。
 2. 使用`expectations`记录(ExpectCreations/ExpectDeletions)期望创建或删除的资源量，再通过观察(CreationObserved/DeletionObserved)资源变化，将资源量的调整做成一个异步的、命令式的过程。
 3. Pod所处StartUp阶段可以作为Pod竞争时衡量优先级的一个方面。
+
+{% blockquote %}
+同步自 https://github.com/pangsq/read_code_of_k8s/blob/master/controllers/ReplicaSet_and_Replication.md
+{% endblockquote %}

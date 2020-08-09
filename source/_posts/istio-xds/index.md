@@ -519,8 +519,8 @@ pilot-discovery会将来自kubernetes/mcp/配置文件中的配置信息转化xD
     2. EndpointShardsByService负责存放服务发现数据，由ServiceController维护
     3. Generators负责生成xDS格式的数据 
 
-<img src="pilot-discovery.png" width="1000" height="600" align="center" />
+![pilot-discovery](pilot-discovery.png)
 
 pilot-discovery与envoy通信建立在grpc连接上，当控制面监听到配置的变化时向envoy推送数据如下图所示：
 
-<img src="channel.png" width="1000" height="600" align="center" />
+![channel](channel.png)

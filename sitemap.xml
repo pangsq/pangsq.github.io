@@ -2,72 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.pangsq.cn/categories/index.html</loc>
+    <loc>https://blog.pangsq.cn/2020/07/26/volume-manager/</loc>
     
-    <lastmod>2020-07-26T16:01:21.240Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/tags/index.html</loc>
-    
-    <lastmod>2020-07-26T16:01:21.240Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/03/build-your-blog/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/07/controller-ReplicaSet-Replication/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/05/workQueue/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/01/gin_router_1/index/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.pangsq.cn/2020/07/26/volume-manager/</loc>
+    <loc>https://blog.pangsq.cn/2020/08/08/istio-xds/index/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/08/08/istio-xds/</loc>
+    
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/02/controllerManagerEntry/index/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/01/gin_router_2/index/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/01/sharedIndexInformer/index/</loc>
     
-    <lastmod>2020-07-26T16:01:21.236Z</lastmod>
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/categories/index.html</loc>
+    
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/tags/index.html</loc>
+    
+    <lastmod>2020-08-09T09:41:07.921Z</lastmod>
     
   </url>
   

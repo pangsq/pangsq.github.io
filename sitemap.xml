@@ -4,77 +4,84 @@
   <url>
     <loc>https://blog.pangsq.cn/tags/index.html</loc>
     
-    <lastmod>2020-08-09T10:40:06.056Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/05/workQueue/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.056Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/07/26/volume-manager/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.056Z</lastmod>
+    <lastmod>2021-07-11T06:57:04.401Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/categories/index.html</loc>
     
-    <lastmod>2020-08-09T10:40:06.056Z</lastmod>
+    <lastmod>2021-07-11T06:57:04.401Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://blog.pangsq.cn/2020/05/03/build-your-blog/</loc>
+    <loc>https://blog.pangsq.cn/2020/05/05/workQueue/</loc>
     
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/07/controller-ReplicaSet-Replication/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_2/index/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/05/01/sharedIndexInformer/index/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://blog.pangsq.cn/2020/08/08/istio-xds/index/</loc>
-    
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/01/gin_router_1/index/</loc>
     
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2021/07/11/servicemesh/tracing/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/07/26/volume-manager/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/07/controller-ReplicaSet-Replication/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/01/gin_router_2/index/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/08/08/istio-xds/index/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/01/sharedIndexInformer/index/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://blog.pangsq.cn/2020/05/03/build-your-blog/</loc>
+    
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://blog.pangsq.cn/2020/05/02/controllerManagerEntry/index/</loc>
     
-    <lastmod>2020-08-09T10:40:06.052Z</lastmod>
+    <lastmod>2021-07-11T06:57:04.397Z</lastmod>
     
   </url>
   
